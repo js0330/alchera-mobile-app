@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  html {
+    /* 고령친화 기본값: 브라우저 기본(16px)보다 한 단계 큼. 큰 글자 모드에서 20px로 전환됩니다. */
+    font-size: 17px;
+  }
+
+  html.text-lg-mode {
+    font-size: 20px;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, sans-serif;
+    color: #1a1a2e;
+    background-color: #e7e9f2;
+    -webkit-font-smoothing: antialiased;
+  }
+}
