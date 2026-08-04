@@ -86,7 +86,7 @@ export default function ComplaintForm({ open, onClose, onSubmit }: ComplaintForm
               value={content}
               onChange={(event) => setContent(event.target.value)}
               rows={4}
-              placeholder="예) 지하주차장에 들어가면 공기가 답답해요."
+              placeholder="예) B1 주차구역A에 들어가면 공기가 답답해요."
               className="mt-2 w-full rounded-lg border border-border-gray bg-bg-white px-4 py-3 text-base text-primary-navy placeholder:text-text-light"
             />
           </div>
