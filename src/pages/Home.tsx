@@ -1,54 +1,50 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronRight, MessageSquareText, Settings } from 'lucide-react'
-import SafetySummaryCard from '../components/SafetySummaryCard'
+import { Bell, ChevronRight, ChevronDown, MessageSquareText, Settings } from 'lucide-react'
 import CurrentLocationCard from '../components/CurrentLocationCard'
-import FacilityRow from '../components/FacilityRow'
-import FacilityDetailSheet from '../components/FacilityDetailSheet'
-import { facilities } from '../data/facilities'
+import MetricCard from '../components/common/MetricCard'
 import { notices } from '../data/notices'
-import { residentProfile, complexName } from '../data/resident'
-import { worstStatus } from '../lib/status'
-import type { Facility } from '../types'
+import { complexName } from '../data/resident'
+import { useCurrentLocation } from '../lib/useCurrentLocation'
 
 export default function Home() {
-  const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null)
-  const overallStatus = worstStatus(facilities)
-  const previewFacilities = facilities.slice(0, 3)
+  const { state, retry } = useCurrentLocation()
   const previewNotices = notices.slice(0, 2)
+  const metricsFacility = state.status === 'resolved' ? state.facility : null
 
   return (
     <div className="flex flex-col gap-6 p-5">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-base text-text-gray">{complexName}</p>
-          <h1 className="text-page-title text-primary-navy">안녕하세요, {residentProfile.name}님</h1>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1 text-base font-semibold text-primary-navy">
+          {complexName}
+          <ChevronDown size={18} className="text-text-light" />
         </div>
-        <Link
-          to="/profile"
-          aria-label="내 정보 및 설정"
-          className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-border-gray bg-bg-white text-text-gray"
-        >
-          <Settings size={22} />
-        </Link>
-      </div>
-
-      <CurrentLocationCard />
-
-      <SafetySummaryCard status={overallStatus} />
-
-      <div>
-        <div className="flex items-center justify-between">
-          <p className="text-card-title text-primary-navy">공용공간 현황</p>
-          <Link to="/facilities" className="flex items-center gap-0.5 text-base font-medium text-primary-blue">
-            전체보기
-            <ChevronRight size={18} />
+        <div className="flex items-center gap-2">
+          <Link
+            to="/alerts"
+            aria-label="알림"
+            className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-border-gray bg-bg-white text-text-gray"
+          >
+            <Bell size={20} />
+          </Link>
+          <Link
+            to="/profile"
+            aria-label="내 정보 및 설정"
+            className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-border-gray bg-bg-white text-text-gray"
+          >
+            <Settings size={20} />
           </Link>
         </div>
-        <div className="mt-3 flex flex-col gap-2">
-          {previewFacilities.map((facility) => (
-            <FacilityRow key={facility.id} facility={facility} onClick={() => setSelectedFacility(facility)} />
-          ))}
+      </div>
+
+      <CurrentLocationCard state={state} onRetry={retry} />
+
+      <div>
+        <p className="text-card-title text-primary-navy">현재 공기질</p>
+        <div className="mt-3 grid grid-cols-2 gap-3">
+          <MetricCard label="CO" unit="ppm" value={metricsFacility ? `${metricsFacility.co}` : '-'} />
+          <MetricCard label="VOC" unit="ppb" value={metricsFacility ? `${metricsFacility.voc}` : '-'} />
+          <MetricCard label="라돈" unit="Bq/㎥" value={metricsFacility ? `${metricsFacility.radon}` : '-'} />
+          <MetricCard label="PM2.5" unit="㎍/㎥" value={metricsFacility ? `${metricsFacility.pm25}` : '-'} />
         </div>
       </div>
 
@@ -56,7 +52,7 @@ export default function Home() {
         <div className="flex items-center justify-between">
           <p className="text-card-title text-primary-navy">최근 알림</p>
           <Link to="/alerts" className="flex items-center gap-0.5 text-base font-medium text-primary-blue">
-            전체보기
+            더보기
             <ChevronRight size={18} />
           </Link>
         </div>
@@ -80,8 +76,6 @@ export default function Home() {
         <MessageSquareText size={20} />
         민원·신고 하기
       </Link>
-
-      <FacilityDetailSheet facility={selectedFacility} onClose={() => setSelectedFacility(null)} />
     </div>
   )
 }

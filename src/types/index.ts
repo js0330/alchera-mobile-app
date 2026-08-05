@@ -6,6 +6,9 @@ export interface Facility {
   status: FacilityStatus
   plainMessage: string
   co2: number
+  co: number
+  voc: number
+  radon: number
   pm25: number
   temp: number
   humidity: number
