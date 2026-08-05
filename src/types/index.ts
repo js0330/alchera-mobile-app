@@ -9,8 +9,12 @@ export interface Facility {
   pm25: number
   temp: number
   humidity: number
+  ventilationOn: boolean
   lastUpdated: string
   thumbnailUrl: string
+  /** 현재 위치 감지(가장 가까운 공용공간 찾기) 시뮬레이션용 좌표입니다. */
+  lat: number
+  lng: number
 }
 
 export type NoticeLevel = 'notice' | 'caution' | 'danger'

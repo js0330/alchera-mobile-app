@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronRight, MessageSquareText, Settings } from 'lucide-react'
 import SafetySummaryCard from '../components/SafetySummaryCard'
+import CurrentLocationCard from '../components/CurrentLocationCard'
 import FacilityRow from '../components/FacilityRow'
 import FacilityDetailSheet from '../components/FacilityDetailSheet'
 import { facilities } from '../data/facilities'
@@ -31,6 +32,8 @@ export default function Home() {
           <Settings size={22} />
         </Link>
       </div>
+
+      <CurrentLocationCard />
 
       <SafetySummaryCard status={overallStatus} />
 
